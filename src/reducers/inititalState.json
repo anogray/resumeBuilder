@@ -1,3 +1,5 @@
+
+
 {
     "document": {
         "documentId": null,
@@ -24,5 +26,6 @@
         "DGRE": "B.Tech(IT)",
         "GRYR": "2021"
     },
-    "skillSection": {}
+    "skillSection": {},
+    "authSection":{"EMAIL":"","PASSWORD":""}
 }

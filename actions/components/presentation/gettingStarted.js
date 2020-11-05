@@ -63,10 +63,6 @@ const mapDispatchToProps=(dispatch)=>{
     return{
         documentActions: bindActionCreators(documentActions, dispatch)
        // setSkinCd:(skinCd)=>(dispatch(documentAction.setSkin(skinCd)))
-               // setSkinCd:(skinCd)=>(dispatch({type: actionTypes.SET_SKIN, skinCd : skinCd}))
-        // setSkinCd:(skinCd)=>(dispatch(documentActions.setSkinCd(skinCd))),
-        // updateSkinCd:(skinCd)=>(dispatch(documentActions.updateSkinCd(skinCd)))
-        //documentActions:bindActionCreators(documentActions, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GettingStarted)
