@@ -1,13 +1,21 @@
-import authSection from '../initailStates/Auth.json';
-import * as actionsCodes from '../actions/actionTypes';
+import initialState from '../initailStates/initialState.json';
+import * as actionTypes from '../actions/actionTypes';
 import update from 'immutability-helper';
-const authReducer = (state = authSection, action) => {
-    switch (action.type) {
-        case actionsCodes.SET_MAIL:
-            return update(state, { authSection: { EMAIL: { $set: action.email } } });
-        case actionsCodes.SET_PASSWORD:
-            return update(state, { authSection: { PASSWORD: { $set: action.password } } });
-        default: return state;
+
+
+export default function authReducer(state= initialState.authSection, action){
+    console.log("state",state)
+    switch(action.type){
+        case actionTypes.SIGN_IN:
+           return  update(state,{ErrorMessage:{$set:''}}); 
+        case actionTypes.SIGN_IN_FAILED:
+           return  update(state,{ErrorMessage:{$set:action.error}});
+        case actionTypes.REGISTER:
+            return  update(state,{ErrorMessage:{$set:''}}); 
+        case actionTypes.REGISTER_FAILED:
+            return  update(state,{ErrorMessage:{$set:''}}); 
+            default:
+             return state;
+        
     }
 }
-export default authReducer

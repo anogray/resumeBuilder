@@ -3,6 +3,14 @@ import { fieldCd } from './../../constants/typeCodes'
 
 
 class ResumePreview extends React.PureComponent {
+    // constructor(props,context) {
+    //     super(props,context)
+    //     this.state = {
+    //       educationSection: this.props.educationSection,
+    //       contactSection:this.props.contactSection,
+    //       document:this.props.document
+    //     }
+    //   }
 
     contactResume=(key, valToAppend)=>{
         if(this.props.contactSection){

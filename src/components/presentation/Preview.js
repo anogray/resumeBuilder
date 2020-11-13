@@ -1,24 +1,39 @@
 import React, { Component } from 'react'
 import ResumePreview from "./resumePreview";
 import {skinCodes} from '../../constants/typeCodes';
-
-import {connect } from 'react-redux'
+import * as documentActions from '../../actions/documentActions';
+import {connect } from 'react-redux';
+import {  bindActionCreators} from 'redux';
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas';
 export class Preview extends Component {
   constructor(props,context) {
     super(props,context)
     this.state = {
       educationSection: this.props.educationSection,
       contactSection:this.props.contactSection,
-      skinCd:this.props.skinCd
+      document:this.props.document
     }
   }
-
-  onChange = (event) => {
-    // this.setState({...this.state, educationSection: {...this.state.educationSection,  [event.target.name]: event.target.value  } })
-    this.setState({...this.state, educationSection: {...this.state.educationSection  } })
+  onChange = async (skinCd) => {
+    this.setState({...this.state, document: {...this.state.document, skinCd:skinCd   }})
+    //   this.setState({skinCd:skinCd})
+    await this.props.documentActions.updateSkinCd(this.state.document.id,skinCd);
+    
+   
+    //   this.props.documentActions.changeFontFamily();          
   }
-  onSubmit = (e) => {
-   console.log(this.state.educationSection);
+  download=async()=>{
+    const resumeElem = document.getElementsByClassName('resume-preview skin1');
+    html2canvas(resumeElem).then((canvas)=>{
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'JPEG',0,0);
+      pdf.save('resume.pdf');
+    }).catch((error)=>{
+      console.log(error);
+    })
+
   }
   render() {
     const { educationSection, contactSection } = this.state
@@ -29,6 +44,7 @@ export class Preview extends Component {
               <ResumePreview contactSection={contactSection} educationSection={educationSection}></ResumePreview>   
             </div>
             <div className="finalize-settings">
+            <button onClick={this.download}>Download</button>
           <div className="section">
             <h1 className=" center">
               Select a resume template to get started</h1>
@@ -40,8 +56,8 @@ export class Preview extends Component {
               skinCodes.map((value, index) => {
               return( <div className="template-card rounded-border">
 
-                <i className={this.state.skinCd==value?'fa fa-check-circle selected':'hide'} aria-hidden="true"></i>
-                <img className={this.state.skinCd==value?'active':''} src={'/images/' + value + '.svg' } />
+                <i className={this.state.document.skinCd==value?'fa fa-check-circle selected':'hide'} aria-hidden="true"></i>
+                <img className={this.state.document.skinCd==value?'active':''} src={'/images/' + value + '.svg' } />
                 <button className="btn-select-theme" onClick={()=>this.onChange(value)}  type='button'>USE TEMPLATE</button>
               </div>);
               })
@@ -105,10 +121,15 @@ export class Preview extends Component {
 
 const mapStateToProps=(state)=>{
   return {
-      contactSection:state.contactReducer.contactSection,
-      educationSection:state.educationReducer.educationSection,
-      skinCd:state.documentReducer.document.skinCd
+      contactSection:state.contact,
+      educationSection:state.education,
+      document:state.document
   }
 }
-
-export default connect(mapStateToProps,null)(Preview)
+const mapDispatchToProps=(dispatch)=>{
+  return{
+      documentActions: bindActionCreators(documentActions, dispatch)
+     // setSkinCd:(skinCd)=>(dispatch(documentAction.setSkin(skinCd)))
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Preview)

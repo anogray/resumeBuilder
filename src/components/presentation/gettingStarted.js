@@ -8,7 +8,7 @@ class GettingStarted extends React.Component{
      constructor(props, context) {
         super(props, context);
         this.state = {
-            skinCd: this.props.skinCd
+            document: this.props.document
           }
         }
     // componentWillReceiveUpdate(nextProps){
@@ -17,12 +17,17 @@ class GettingStarted extends React.Component{
     componentWillReceiveProps(nextProps){
         this.setState({skinCd:nextProps.skinCd})
       }
-      onChange = (skinCd) => {
+      onChange = async (skinCd) => {
 
         //   this.setState({skinCd:skinCd})
-          this.props.documentActions.setSkinCd(skinCd);  
+        if(this.state.document.id){
+            await this.props.documentActions.updateSkinCd(this.state.document.id,skinCd);
+        }else{
+            await this.props.documentActions.setSkinCd(skinCd);
+        }
+        console.log(skinCd);
+        await this.props.history.push('/contact');
         //   this.props.documentActions.changeFontFamily();          
-          this.props.history.push('/contact');
       }
 
       render(){
@@ -55,7 +60,7 @@ class GettingStarted extends React.Component{
   
 const mapStateToProps=(state)=>{
     return {
-        skinCd: state.documentReducer.document.skinCd
+        document: state.document
     }
 }
 
@@ -63,10 +68,6 @@ const mapDispatchToProps=(dispatch)=>{
     return{
         documentActions: bindActionCreators(documentActions, dispatch)
        // setSkinCd:(skinCd)=>(dispatch(documentAction.setSkin(skinCd)))
-               // setSkinCd:(skinCd)=>(dispatch({type: actionTypes.SET_SKIN, skinCd : skinCd}))
-        // setSkinCd:(skinCd)=>(dispatch(documentActions.setSkinCd(skinCd))),
-        // updateSkinCd:(skinCd)=>(dispatch(documentActions.updateSkinCd(skinCd)))
-        //documentActions:bindActionCreators(documentActions, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GettingStarted)
