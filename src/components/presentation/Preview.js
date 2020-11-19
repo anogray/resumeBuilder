@@ -25,7 +25,7 @@ export class Preview extends Component {
   }
   download=async()=>{
     const resumeElem = document.getElementsByClassName('resume-preview skin1');
-    html2canvas(resumeElem).then((canvas)=>{
+    html2canvas(resumeElem[0]).then((canvas)=>{
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF();
       pdf.addImage(imgData, 'JPEG',0,0);
